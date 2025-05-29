@@ -15,14 +15,16 @@ const eventSchema = new mongoose.Schema ({
         minlength: 1,
         maxlength:200
     },
-    date: { 
-        type: Date, 
-        required: true,
-        validate: {
-            validator: (value) => value > new Date(), 
-            message: 'Date must be in the future'
-        }
+    date: {
+    type: Date,
+    required: true,
+    validate: {
+      validator: function (value) {
+        return value.getTime() > Date.now(); // Ensures future time
+      },
+      message: 'Date must be in the future',
     },
+  },
     description: {
         type: String, 
         required: true,

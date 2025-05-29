@@ -1,4 +1,3 @@
-
 import User from '../model/user.js';
 import generateToken from '../utils/generateToken.js';
 import sendEmail from '../utils/email.js' 
@@ -37,8 +36,8 @@ const signUp = async (req, res, next) =>{
             await sendEmail({
                 to: User.email,
                 subject: "Welcome to Our Event Booking App",
-                text: 'Dear ${User.name}, welcome to our platform!',
-                html: "<p>Dear ${User.name}, welcome to our platform!</p>"
+                text: `Dear ${newUser.first_name}, welcome to our platform!`,
+                html: `<p>Dear ${newUser.first_name}, welcome to our platform!</p>`
             })
         }catch (error) {
             console.error('Error sending welcome email:', error)
