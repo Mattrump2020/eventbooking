@@ -92,6 +92,22 @@ const createBooking = async (req, res, next) =>{
         return res.status(400).json({ message: 'You have already booked this event' });
     }        
 
+        if(event.availableSeats <= 0){
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(400).json({
+                message : 'No seat available, Event Sold Out'
+            })
+        }
+
+        if (seats > event.availableSeats) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(400).json({
+                message: `Only ${event.availableSeats} seats are available`
+            });
+        }
+
         const booking = new Booking({event: eventId, user: userId, seats});
         await booking.save({session});
 
