@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 connectMongoDb();
 
-app.use(cors({ origin: 'http://localhost:2500' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use(express.json())
 app.use(express.urlencoded(
@@ -42,7 +42,7 @@ app.get('/evently', (req,res)=>{
 //API documentation
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3500
 
 app.listen(port, ()=>{
     console.log(`Server is running on http://localhost:${port}`);

@@ -2,220 +2,177 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "Evently REST API",
+    "description": "API documentation for Evently – an event booking platform."
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter your bearer token in the format **Bearer &lt;token&gt;**"
+    }
+  },
   "paths": {
     "/evently": {
       "get": {
-        "description": "",
+        "tags": ["General"],
+        "summary": "Welcome route",
+        "description": "Returns a welcome message from Evently API.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "API is running"
           }
         }
       }
     },
     "/evently/user/signUp": {
       "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "first_name": {
-                  "example": "any"
-                },
-                "last_name": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
+        "tags": ["User"],
+        "summary": "Register a new user",
+        "description": "Allows a new user to sign up.",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": ["first_name", "last_name", "email", "password"],
+            "properties": {
+              "first_name": { "type": "string", "example": "John" },
+              "last_name": { "type": "string", "example": "Doe" },
+              "email": { "type": "string", "example": "john.doe@example.com" },
+              "password": { "type": "string", "example": "StrongPass123!" }
             }
           }
-        ],
+        }],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "409": {
-            "description": "Conflict"
-          }
+          "201": { "description": "User created" },
+          "400": { "description": "Bad request" },
+          "403": { "description": "Forbidden" },
+          "409": { "description": "User already exists" }
         }
       }
     },
     "/evently/user/signIn": {
       "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
+        "tags": ["User"],
+        "summary": "Authenticate user",
+        "description": "Allows a registered user to sign in and receive a token.",
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": ["email", "password"],
+            "properties": {
+              "email": { "type": "string", "example": "user@example.com" },
+              "password": { "type": "string", "example": "strongPassword123" }
             }
           }
-        ],
+        }],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "Signed in successfully" },
+          "400": { "description": "Bad request" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Server error" }
         }
       }
     },
     "/evently/user/me": {
       "get": {
-        "description": "",
+        "tags": ["User"],
+        "summary": "Get current user",
+        "security": [{ "Bearer": [] }],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "User data retrieved" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Server error" }
         }
       }
     },
     "/evently/user/logout": {
       "post": {
-        "description": "",
+        "tags": ["User"],
+        "summary": "Logout user",
+        "security": [{ "Bearer": [] }],
         "responses": {
-          "200": {
-            "description": "OK"
-          }
+          "200": { "description": "Logged out successfully" }
         }
       }
     },
+
     "/evently/event/all": {
       "get": {
-        "description": "",
+        "tags": ["Event"],
+        "summary": "Fetch all events",
+        "security": [{ "Bearer": [] }],
         "responses": {
-          "200": {
-            "description": "OK"
-          }
+          "200": { "description": "List of all events" }
         }
       }
     },
     "/evently/event/{id}": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "tags": ["Event"],
+        "summary": "Get specific event",
+        "security": [{ "Bearer": [] }],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
+          "200": { "description": "Event found" },
+          "404": { "description": "Event not found" }
         }
       }
     },
     "/evently/event/create": {
       "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                },
-                "date": {
-                  "example": "any"
-                },
-                "time": {
-                  "example": "any"
-                },
-                "location": {
-                  "example": "any"
-                },
-                "availableSeats": {
-                  "example": "any"
-                },
-                "ticketPrice": {
-                  "example": "any"
-                }
-              }
+        "tags": ["Event"],
+        "summary": "Create new event",
+        "security": [{ "Bearer": [] }],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": ["title", "description", "date", "time", "location", "availableSeats", "ticketPrice"],
+            "properties": {
+              "title": { "type": "string", "example": "Mattrump Concert" },
+              "description": { "type": "string", "example": "The most anticipated concert ever in Africa" },
+              "date": { "type": "string", "format": "date", "example": "2025-05-27" },
+              "time": { "type": "string", "example": "18:30" },
+              "location": { "type": "string", "example": "Lagos, Nigeria" },
+              "availableSeats": { "type": "integer", "example": 50 },
+              "ticketPrice": { "type": "number", "format": "float", "example": 100.5 }
             }
           }
-        ],
+        }],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Event created" },
+          "400": { "description": "Bad request" },
+          "404": { "description": "Related resource not found" },
+          "409": { "description": "Duplicate event" },
+          "500": { "description": "Server error" }
         }
       }
     },
     "/evently/event/update/{id}": {
       "put": {
-        "description": "",
+        "tags": ["Event"],
+        "summary": "Update an event",
+        "security": [{ "Bearer": [] }],
         "parameters": [
           {
             "name": "id",
@@ -226,160 +183,122 @@
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
-                "title": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                },
-                "date": {
-                  "example": "any"
-                },
-                "time": {
-                  "example": "any"
-                },
-                "location": {
-                  "example": "any"
-                },
-                "availableSeats": {
-                  "example": "any"
-                },
-                "ticketPrice": {
-                  "example": "any"
-                }
+                "title": { "type": "string" },
+                "description": { "type": "string" },
+                "date": { "type": "string", "format": "date" },
+                "time": { "type": "string" },
+                "location": { "type": "string" },
+                "availableSeats": { "type": "integer" },
+                "ticketPrice": { "type": "number", "format": "float" }
               }
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
+          "200": { "description": "Event updated" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Event not found" }
         }
       }
     },
     "/evently/event/delete/{id}": {
       "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "tags": ["Event"],
+        "summary": "Delete an event",
+        "security": [{ "Bearer": [] }],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
+          "200": { "description": "Event deleted" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Event not found" }
         }
       }
     },
+
     "/evently/booking/allBookings": {
       "get": {
-        "description": "",
+        "tags": ["Booking"],
+        "summary": "Get all bookings",
+        "security": [{ "Bearer": [] }],
         "responses": {
-          "200": {
-            "description": "OK"
-          }
+          "200": { "description": "List of all bookings" }
         }
       }
     },
     "/evently/booking/newBooking": {
       "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "event": {
-                  "example": "any"
-                },
-                "seats": {
-                  "example": "any"
-                }
-              }
+        "tags": ["Booking"],
+        "summary": "Create a new booking",
+        "security": [{ "Bearer": [] }],
+        "parameters": [{
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "required": ["event", "seats"],
+            "properties": {
+              "event": { "type": "string", "example": "60d21b4667d0d8992e610c85" },
+              "seats": { "type": "integer", "example": 3 }
             }
           }
-        ],
+        }],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
+          "201": { "description": "Booking created" },
+          "400": { "description": "Invalid input" },
+          "404": { "description": "Event not found" }
         }
       }
     },
     "/evently/booking/mybookings": {
       "get": {
-        "description": "",
+        "tags": ["Booking"],
+        "summary": "Get user's bookings",
+        "security": [{ "Bearer": [] }],
         "responses": {
-          "200": {
-            "description": "OK"
-          }
+          "200": { "description": "List of bookings for authenticated user" }
         }
       }
     },
     "/evently/booking/admin/{id}": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "tags": ["Booking"],
+        "summary": "Get booking by ID (admin)",
+        "security": [{ "Bearer": [] }],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "404": {
-            "description": "Not Found"
-          }
+          "201": { "description": "Booking found" },
+          "404": { "description": "Booking not found" }
         }
       }
     },
     "/evently/booking/delete/{id}": {
       "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "tags": ["Booking"],
+        "summary": "Delete a booking",
+        "security": [{ "Bearer": [] }],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
-          "200": {
-            "description": "OK"
-          }
+          "200": { "description": "Booking deleted" }
         }
       }
     }
