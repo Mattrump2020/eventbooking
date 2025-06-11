@@ -5,7 +5,7 @@
     "title": "Evently REST API",
     "description": "API documentation for Evently – an event booking platform."
   },
-  "host": "localhost:3000",
+  "host": "localhost:2500",
   "basePath": "/",
   "schemes": ["http"],
   "consumes": ["application/json"],
